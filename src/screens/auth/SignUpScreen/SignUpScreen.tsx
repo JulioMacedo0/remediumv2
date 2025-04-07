@@ -11,7 +11,7 @@ import {Button} from '../../../components/Button/Button';
 import {AuthScreenProps} from '../../../routes/navigationType';
 
 export function SignUpScreen({}: AuthScreenProps<'SignUpScreen'>) {
-  const {control, formState, handleSubmit} = useForm<SignUpScreenSchema>({
+  const {control, handleSubmit} = useForm<SignUpScreenSchema>({
     resolver: zodResolver(signUpScreenSchema),
     defaultValues: {
       username: '',
@@ -54,7 +54,6 @@ export function SignUpScreen({}: AuthScreenProps<'SignUpScreen'>) {
       <Button
         buttonVariant="fill"
         title="Criar conta"
-        disabled={!formState.isValid}
         onPress={handleSubmit(submitForm)}
       />
     </Screen>
