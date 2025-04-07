@@ -1,13 +1,14 @@
 import React from 'react';
 
 import {
-  ArrowLeft,
   Camera,
-  FlipVertical,
+  ArrowLeft,
+  EllipsisVertical,
   X,
-  IconProps as phosphorIconProps,
-} from 'phosphor-react-native';
-import {TouchableOpacityBox, TouchableOpacityBoxProps} from '../Box/Box';
+  LucideProps,
+} from 'lucide-react-native';
+
+import {Box, TouchableOpacityBox, TouchableOpacityBoxProps} from '../Box/Box';
 import {useAppTheme} from '../../hooks/UseAppTheme/UseAppTheme';
 
 //type IconKeys = keyof typeof icons;
@@ -17,20 +18,37 @@ type IconNames = 'ArrowLeft' | 'Camera' | 'EllipsisVertical' | 'X';
 type IconProps = {
   name: IconNames;
   touchableOpacityBoxProps?: TouchableOpacityBoxProps;
-} & phosphorIconProps;
+} & LucideProps;
 
-export function Icon({name, touchableOpacityBoxProps, ...props}: IconProps) {
+export function Icon({
+  name,
+  touchableOpacityBoxProps,
+  onPress,
+  ...props
+}: IconProps) {
   const {colors} = useAppTheme();
 
-  const baseStyle: phosphorIconProps = {
+  const baseStyle: LucideProps = {
     color: colors.primary,
     size: 28,
   };
   const IconCustom = createIcon(name);
+
+  if (onPress) {
+    return (
+      <TouchableOpacityBox
+        activeOpacity={0.7}
+        onPress={onPress}
+        {...touchableOpacityBoxProps}>
+        <IconCustom {...baseStyle} {...props} />
+      </TouchableOpacityBox>
+    );
+  }
+
   return (
-    <TouchableOpacityBox activeOpacity={0.7} {...touchableOpacityBoxProps}>
+    <Box>
       <IconCustom {...baseStyle} {...props} />
-    </TouchableOpacityBox>
+    </Box>
   );
 }
 
@@ -41,7 +59,7 @@ function createIcon(name: IconNames) {
     case 'Camera':
       return Camera;
     case 'EllipsisVertical':
-      return FlipVertical;
+      return EllipsisVertical;
     default:
       return X;
   }

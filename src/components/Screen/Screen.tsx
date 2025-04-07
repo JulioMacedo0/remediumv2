@@ -57,7 +57,6 @@ export function Screen({
               flexDirection="row"
               alignItems="center">
               <Icon name="ArrowLeft" />
-
               <Text preset="paragraphMedium" color="primary" semiBold ml="s8">
                 Voltar
               </Text>
