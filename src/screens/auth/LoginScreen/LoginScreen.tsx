@@ -9,6 +9,7 @@ import {Screen} from '../../../components/Screen/Screen';
 import {Text} from '../../../components/Text/Text';
 import {FormTextInput} from '../../../components/FormTextInput/FormTextInput';
 import {Button} from '../../../components/Button/Button';
+import {api} from 'api/httpClient';
 
 export function LoginScreen({navigation}: AuthScreenProps<'LoginScreen'>) {
   const {control, handleSubmit} = useForm<LoginScreenSchema>({
@@ -21,6 +22,17 @@ export function LoginScreen({navigation}: AuthScreenProps<'LoginScreen'>) {
   });
 
   function submitForm(formValues: LoginScreenSchema) {
+    api
+      .post('/auth/login', {
+        email: formValues.email,
+        password: formValues.password,
+      })
+      .then(response => {
+        console.log('Login successful:', response.data);
+      })
+      .catch(error => {
+        console.error('Login failed:', error);
+      });
     console.log(formValues);
   }
   return (
