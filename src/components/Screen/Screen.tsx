@@ -2,6 +2,7 @@ import React, {ReactNode} from 'react';
 import {
   KeyboardAvoidingView,
   Platform,
+  StatusBar,
   StyleProp,
   ViewStyle,
 } from 'react-native';
@@ -37,7 +38,7 @@ export function Screen({
   const $keyboardAvoidingView: StyleProp<ViewStyle> = {
     flex: 1,
   };
-
+  StatusBar.setBarStyle('dark-content', true);
   return (
     <KeyboardAvoidingView
       style={$keyboardAvoidingView}
