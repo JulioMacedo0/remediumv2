@@ -1,7 +1,8 @@
 import React from 'react';
 import {AppTabScreenProps} from '../../../routes/navigationType';
-import {Screen} from 'react-native-screens';
+
 import {Text} from '../../../components/Text/Text';
+import {Screen} from '../../../components/Screen/Screen';
 
 export function HomeScreen({}: AppTabScreenProps<'HomeScreen'>) {
   return (

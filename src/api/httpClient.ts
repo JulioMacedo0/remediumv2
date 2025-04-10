@@ -1,6 +1,6 @@
 import axios from 'axios';
 import {env} from '../env';
-import {storageService} from 'services/storage/storageService';
+import {storageService} from '../services/storage/storageService';
 
 export const api = axios.create({
   baseURL: `${env.API_URL}/api/v1/`,
