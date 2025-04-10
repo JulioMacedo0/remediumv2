@@ -11,7 +11,7 @@ import {FormTextInput} from '../../../components/FormTextInput/FormTextInput';
 import {Button} from '../../../components/Button/Button';
 
 export function LoginScreen({navigation}: AuthScreenProps<'LoginScreen'>) {
-  const {control, formState, handleSubmit} = useForm<LoginScreenSchema>({
+  const {control, handleSubmit} = useForm<LoginScreenSchema>({
     resolver: zodResolver(loginScreenSchema),
     defaultValues: {
       email: '',
