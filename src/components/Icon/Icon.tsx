@@ -6,22 +6,43 @@ import {
   EllipsisVertical,
   X,
   LucideProps,
+  Settings,
+  Home,
+  Plus,
 } from 'lucide-react-native';
 
 import {Box, TouchableOpacityBox, TouchableOpacityBoxProps} from '../Box/Box';
 import {useAppTheme} from '../../hooks/UseAppTheme/UseAppTheme';
+import {ThemeColors} from '../../theme/theme';
 
-//type IconKeys = keyof typeof icons;
-
-type IconNames = 'ArrowLeft' | 'Camera' | 'EllipsisVertical' | 'X';
+export type IconNames =
+  | 'ArrowLeft'
+  | 'Camera'
+  | 'EllipsisVertical'
+  | 'X'
+  | 'Settings'
+  | 'Home'
+  | 'Plus';
 
 type IconProps = {
   name: IconNames;
+  color: ThemeColors;
   touchableOpacityBoxProps?: TouchableOpacityBoxProps;
-} & LucideProps;
+} & Omit<LucideProps, 'color'>;
+
+const iconMap: Record<IconNames, React.ComponentType<LucideProps>> = {
+  ArrowLeft,
+  Camera,
+  EllipsisVertical,
+  X,
+  Settings,
+  Home,
+  Plus,
+};
 
 export function Icon({
   name,
+  color,
   touchableOpacityBoxProps,
   onPress,
   ...props
@@ -29,7 +50,7 @@ export function Icon({
   const {colors} = useAppTheme();
 
   const baseStyle: LucideProps = {
-    color: colors.primary,
+    color: colors[color],
     size: 28,
   };
   const IconCustom = createIcon(name);
@@ -53,14 +74,5 @@ export function Icon({
 }
 
 function createIcon(name: IconNames) {
-  switch (name) {
-    case 'ArrowLeft':
-      return ArrowLeft;
-    case 'Camera':
-      return Camera;
-    case 'EllipsisVertical':
-      return EllipsisVertical;
-    default:
-      return X;
-  }
+  return iconMap[name] ?? X;
 }
