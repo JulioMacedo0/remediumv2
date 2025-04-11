@@ -69,8 +69,8 @@ export const useAuthStore = create<AuthState>(set => ({
   },
 
   restoreSession: async () => {
-    const token = storageService.getItem<string>(STORAGE_KEYS.TOKEN);
-    const user = storageService.getItem<UserType>(STORAGE_KEYS.USER);
+    const token = storageService.getItem('TOKEN');
+    const user = storageService.getItem('USER');
     //simulate delay to ferify token
     await new Promise(resolve => setTimeout(resolve, 3000));
     if (token && user) {

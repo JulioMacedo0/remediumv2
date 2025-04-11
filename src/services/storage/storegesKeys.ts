@@ -1,3 +1,5 @@
+import {UserType} from '../../@types/userTypes';
+
 export const STORAGE_KEYS = {
   USER: 'USER',
   TOKEN: 'TOKEN',
@@ -5,4 +7,13 @@ export const STORAGE_KEYS = {
   THEME: 'THEME',
   VIEWONBOARING: 'VIEWONBOARING',
 } as const;
-export type StorageKeys = typeof STORAGE_KEYS;
+
+export type StorageKeys = keyof typeof STORAGE_KEYS;
+
+export type StorageValueMap = {
+  USER: UserType;
+  TOKEN: string;
+  LOCALE: string;
+  THEME: 'light' | 'dark';
+  VIEWONBOARING: boolean;
+};

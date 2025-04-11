@@ -1,9 +1,10 @@
 import {mmkvStorage} from './mmkvStorageService';
+import {StorageValueMap, StorageKeys} from './storegesKeys';
 
 export interface StorageService {
-  getItem: <T>(key: string) => T | null;
-  setItem: <T>(key: string, value: T) => void;
-  removeItem: (key: string) => void;
+  getItem: <K extends StorageKeys>(key: K) => StorageValueMap[K] | null;
+  setItem: <K extends StorageKeys>(key: K, value: StorageValueMap[K]) => void;
+  removeItem: (key: StorageKeys) => void;
 }
 
 export const storageService: StorageService = mmkvStorage;
