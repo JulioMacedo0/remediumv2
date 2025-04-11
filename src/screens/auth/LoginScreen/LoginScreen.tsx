@@ -48,6 +48,7 @@ export function LoginScreen({navigation}: AuthScreenProps<'LoginScreen'>) {
         label="Senha"
         placeholder="Digite sua senha"
         returnKeyType="done"
+        isPassword
         boxProps={{
           mb: 's12',
         }}
