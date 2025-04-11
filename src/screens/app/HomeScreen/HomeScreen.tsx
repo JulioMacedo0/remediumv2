@@ -6,7 +6,7 @@ import {Screen} from '../../../components/Screen/Screen';
 
 export function HomeScreen({}: AppTabScreenProps<'HomeScreen'>) {
   return (
-    <Screen>
+    <Screen title="Remedium">
       <Text>Home</Text>
     </Screen>
   );
