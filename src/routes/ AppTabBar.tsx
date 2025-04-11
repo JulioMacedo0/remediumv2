@@ -62,13 +62,11 @@ export function AppTabBar({state, descriptors, navigation}: BottomTabBarProps) {
             onLongPress={onLongPress}
             style={$baseTouchableProps}>
             <Icon
-              color={isFocused ? 'primary' : 'backgroundContrast'}
+              color={isFocused ? 'primary' : 'gray1'}
               name={tabItem.icon}
-              // fill={isFocused ? 'primary' : 'backgroundContrast'}
+              // fill={isFocused ? 'primary' : 'gray1'}
             />
-            <Text
-              {...$label}
-              color={isFocused ? 'primary' : 'backgroundContrast'}>
+            <Text {...$label} color={isFocused ? 'primary' : 'gray1'}>
               {tabItem.label}
             </Text>
           </TouchableOpacityBox>
