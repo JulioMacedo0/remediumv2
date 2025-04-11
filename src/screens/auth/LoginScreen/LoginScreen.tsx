@@ -9,7 +9,7 @@ import {Screen} from '../../../components/Screen/Screen';
 import {Text} from '../../../components/Text/Text';
 import {FormTextInput} from '../../../components/FormTextInput/FormTextInput';
 import {Button} from '../../../components/Button/Button';
-import {api} from '../../../api/httpClient';
+import {useAuthStore} from '../../../stores/auth/authStore';
 
 export function LoginScreen({navigation}: AuthScreenProps<'LoginScreen'>) {
   const {control, handleSubmit} = useForm<LoginScreenSchema>({
@@ -20,20 +20,10 @@ export function LoginScreen({navigation}: AuthScreenProps<'LoginScreen'>) {
     },
     reValidateMode: 'onChange',
   });
-
-  function submitForm(formValues: LoginScreenSchema) {
-    api
-      .post('/auth/login', {
-        email: formValues.email,
-        password: formValues.password,
-      })
-      .then(response => {
-        console.log('Login successful:', response.data);
-      })
-      .catch(error => {
-        console.error('Login failed:', error);
-      });
-    console.log(formValues);
+  const signIn = useAuthStore(s => s.signIn);
+  const isLoading = useAuthStore(s => s.isLoading);
+  async function submitForm(formValues: LoginScreenSchema) {
+    signIn(formValues);
   }
   return (
     <Screen scrollabe>
@@ -71,6 +61,7 @@ export function LoginScreen({navigation}: AuthScreenProps<'LoginScreen'>) {
         buttonVariant="fill"
         title="Entrar"
         mb="s10"
+        loading={isLoading}
         //disabled={!formState.isValid}
         onPress={handleSubmit(submitForm)}
       />
