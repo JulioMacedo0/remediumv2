@@ -19,6 +19,7 @@ import {Icon} from '../Icon/Icon';
 
 interface ScreenProps {
   children: ReactNode;
+  title?: string;
   canGoBack?: boolean;
   scrollabe?: boolean;
   boxProps?: BoxProps;
@@ -27,6 +28,7 @@ interface ScreenProps {
 export function Screen({
   scrollabe,
   canGoBack = false,
+  title,
   children,
   boxProps,
 }: ScreenProps) {
@@ -50,19 +52,28 @@ export function Screen({
           backgroundColor="background"
           {...boxProps}
           style={{paddingTop: top, paddingBottom: bottom}}>
-          {canGoBack && (
-            <TouchableOpacityBox
-              activeOpacity={0.7}
-              onPress={() => navigation.goBack()}
-              mb="s24"
-              flexDirection="row"
-              alignItems="center">
-              <Icon name="ArrowLeft" />
-              <Text preset="paragraphMedium" color="primary" semiBold ml="s8">
-                Voltar
+          <Box flexDirection="row" alignItems="center" mb="s10">
+            {canGoBack && (
+              <TouchableOpacityBox
+                activeOpacity={0.7}
+                mr="s10"
+                onPress={() => navigation.goBack()}
+                flexDirection="row"
+                alignItems="center">
+                <Icon name="ArrowLeft" />
+              </TouchableOpacityBox>
+            )}
+            {title && (
+              <Text
+                preset="headingLarge"
+                color="primary"
+                semiBold
+                textAlign="center">
+                {title}
               </Text>
-            </TouchableOpacityBox>
-          )}
+            )}
+          </Box>
+
           {children}
         </Box>
       </Container>
