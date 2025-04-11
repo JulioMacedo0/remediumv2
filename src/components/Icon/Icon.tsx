@@ -9,6 +9,10 @@ import {
   Settings,
   Home,
   Plus,
+  Moon,
+  Sun,
+  Languages,
+  Palette,
 } from 'lucide-react-native';
 
 import {Box, TouchableOpacityBox, TouchableOpacityBoxProps} from '../Box/Box';
@@ -22,9 +26,13 @@ export type IconNames =
   | 'X'
   | 'Settings'
   | 'Home'
-  | 'Plus';
+  | 'Plus'
+  | 'Moon'
+  | 'Sun'
+  | 'Languages'
+  | 'Palette';
 
-type IconProps = {
+export type IconProps = {
   name: IconNames;
   color?: ThemeColors;
   touchableOpacityBoxProps?: TouchableOpacityBoxProps;
@@ -38,6 +46,10 @@ const iconMap: Record<IconNames, React.ComponentType<LucideProps>> = {
   Settings,
   Home,
   Plus,
+  Moon,
+  Sun,
+  Languages,
+  Palette,
 };
 
 export function Icon({
