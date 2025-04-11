@@ -42,7 +42,7 @@ const iconMap: Record<IconNames, React.ComponentType<LucideProps>> = {
 
 export function Icon({
   name,
-  color,
+  color = 'primary',
   touchableOpacityBoxProps,
   onPress,
   ...props
@@ -50,7 +50,7 @@ export function Icon({
   const {colors} = useAppTheme();
 
   const baseStyle: LucideProps = {
-    color: colors[color ?? 'primary'],
+    color: colors[color],
     size: 28,
   };
   const IconCustom = createIcon(name);
