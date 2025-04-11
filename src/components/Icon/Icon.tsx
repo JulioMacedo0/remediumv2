@@ -13,6 +13,8 @@ import {
   Sun,
   Languages,
   Palette,
+  EyeOff,
+  Eye,
 } from 'lucide-react-native';
 
 import {Box, TouchableOpacityBox, TouchableOpacityBoxProps} from '../Box/Box';
@@ -30,7 +32,9 @@ export type IconNames =
   | 'Moon'
   | 'Sun'
   | 'Languages'
-  | 'Palette';
+  | 'Palette'
+  | 'EyeOff'
+  | 'Eye';
 
 export type IconProps = {
   name: IconNames;
@@ -50,6 +54,8 @@ const iconMap: Record<IconNames, React.ComponentType<LucideProps>> = {
   Sun,
   Languages,
   Palette,
+  EyeOff,
+  Eye,
 };
 
 export function Icon({
