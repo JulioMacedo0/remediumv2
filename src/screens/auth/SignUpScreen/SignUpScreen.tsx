@@ -5,7 +5,6 @@ import {useForm} from 'react-hook-form';
 
 import {signUpScreenSchema, SignUpScreenSchema} from './SignUpScreenSchema';
 import {Screen} from '../../../components/Screen/Screen';
-import {Text} from '../../../components/Text/Text';
 import {FormTextInput} from '../../../components/FormTextInput/FormTextInput';
 import {Button} from '../../../components/Button/Button';
 import {AuthScreenProps} from '../../../routes/navigationType';
@@ -30,10 +29,7 @@ export function SignUpScreen({navigation}: AuthScreenProps<'SignUpScreen'>) {
   }
 
   return (
-    <Screen canGoBack scrollabe>
-      <Text mb="s10" preset="headingLarge" color="primary">
-        Registrar
-      </Text>
+    <Screen title="Registrar" canGoBack scrollabe>
       <FormTextInput
         control={control}
         name="username"
