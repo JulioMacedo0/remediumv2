@@ -26,7 +26,7 @@ export type IconNames =
 
 type IconProps = {
   name: IconNames;
-  color: ThemeColors;
+  color?: ThemeColors;
   touchableOpacityBoxProps?: TouchableOpacityBoxProps;
 } & Omit<LucideProps, 'color'>;
 
@@ -50,7 +50,7 @@ export function Icon({
   const {colors} = useAppTheme();
 
   const baseStyle: LucideProps = {
-    color: colors[color],
+    color: colors[color ?? 'primary'],
     size: 28,
   };
   const IconCustom = createIcon(name);
