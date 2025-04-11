@@ -15,6 +15,10 @@ const palette = {
   gray4: '#E1E1E1',
   gray5: '#F5F5F5',
   grayWhite: '#FFFFFF',
+  yellow: '#FFD700',
+  yellowLight: '#FFF8DC',
+  blueDark: '#4B5563',
+  blueDarkLight: '#E5EAF2',
 };
 export const theme = createTheme({
   colors: {
