@@ -9,8 +9,9 @@ import {Text} from '../../../components/Text/Text';
 import {FormTextInput} from '../../../components/FormTextInput/FormTextInput';
 import {Button} from '../../../components/Button/Button';
 import {AuthScreenProps} from '../../../routes/navigationType';
+import {useAuthStore} from '../../../stores/auth/authStore';
 
-export function SignUpScreen({}: AuthScreenProps<'SignUpScreen'>) {
+export function SignUpScreen({navigation}: AuthScreenProps<'SignUpScreen'>) {
   const {control, handleSubmit} = useForm<SignUpScreenSchema>({
     resolver: zodResolver(signUpScreenSchema),
     defaultValues: {
@@ -19,9 +20,13 @@ export function SignUpScreen({}: AuthScreenProps<'SignUpScreen'>) {
       password: '',
     },
   });
-
+  const signUp = useAuthStore(state => state.signUp);
+  const isLoading = useAuthStore(state => state.isLoading);
+  const closePage = () => {
+    navigation.goBack();
+  };
   function submitForm(formValues: SignUpScreenSchema) {
-    console.log(formValues);
+    signUp(formValues, closePage);
   }
 
   return (
@@ -46,12 +51,14 @@ export function SignUpScreen({}: AuthScreenProps<'SignUpScreen'>) {
       <FormTextInput
         control={control}
         name="password"
+        isPassword
         label="Senha"
         placeholder="Digite sua senha"
         boxProps={{mb: 's20'}}
       />
 
       <Button
+        loading={isLoading}
         buttonVariant="fill"
         title="Criar conta"
         onPress={handleSubmit(submitForm)}
