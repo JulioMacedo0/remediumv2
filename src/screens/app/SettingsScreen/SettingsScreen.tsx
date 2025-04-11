@@ -1,13 +1,73 @@
 import React from 'react';
-import {AppTabScreenProps} from '../../../routes/navigationType';
-
-import {Text} from '../../../components/Text/Text';
 import {Screen} from '../../../components/Screen/Screen';
+import {Text} from '../../../components/Text/Text';
+import {useAuthStore} from '../../../stores/auth/authStore';
+import {ConfigSection} from '../../../components/ConfigSection/ConfigSection';
 
-export function SettingsScreen({}: AppTabScreenProps<'SettingsScreen'>) {
+export function SettingsScreen() {
+  const logout = useAuthStore(s => s.logout);
+
   return (
     <Screen scrollabe>
-      <Text>Settings</Text>
+      <Text mb="s10" preset="headingLarge" color="primary">
+        Configurações
+      </Text>
+
+      <ConfigSection
+        title="Tema"
+        actions={[
+          {
+            label: 'Claro',
+            iconProps: {
+              name: 'Sun',
+              color: 'yellow',
+            },
+            onPress: () => console.log('Tema claro'),
+          },
+        ]}
+      />
+
+      <ConfigSection
+        title="Cor "
+        actions={[
+          {
+            label: 'Verde',
+            iconProps: {
+              name: 'Palette',
+              color: 'grayWhite',
+            },
+            onPress: () => console.log('Tema claro'),
+          },
+        ]}
+      />
+
+      <ConfigSection
+        title="Idioma"
+        actions={[
+          {
+            label: 'Português',
+            iconProps: {
+              name: 'Languages',
+              color: 'grayWhite',
+            },
+            onPress: () => console.log('Idioma en'),
+          },
+        ]}
+      />
+
+      <ConfigSection
+        title="Sessão"
+        actions={[
+          {
+            label: 'Sair',
+            iconProps: {
+              name: 'X',
+              color: 'redError',
+            },
+            onPress: logout,
+          },
+        ]}
+      />
     </Screen>
   );
 }
