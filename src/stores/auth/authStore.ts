@@ -3,6 +3,8 @@ import {UserType} from '../../@types/userTypes';
 import {authService, SignInRequest} from '../../services/auth/authService';
 import {STORAGE_KEYS} from '../../services/storage/storegesKeys';
 import {storageService} from '../../services/storage/storageService';
+import {userService} from '../../services/user/userService';
+import {CreateUserPayload} from '../../services/user/userType';
 
 type AuthState = {
   user: UserType | null;
@@ -10,7 +12,7 @@ type AuthState = {
   isLoading: boolean;
 
   signIn: (payload: SignInRequest) => Promise<void>;
-  // signUp: (payload: SignInRequest) => Promise<void>;
+  signUp: (payload: CreateUserPayload, callBack: () => void) => Promise<void>;
   logout: () => void;
   restoreSession: () => Promise<void>;
 };
@@ -38,29 +40,19 @@ export const useAuthStore = create<AuthState>(set => ({
     }
   },
 
-  //   signUp: async (payload) => {
-  //     set({ isLoading: true });
+  signUp: async (payload, callBack) => {
+    set({isLoading: true});
 
-  //     try {
-  //       const user = await authService.signUp(payload);
-
-  //       // Se quiser logar automaticamente:
-  //       const { accessToken } = await authService.signIn({
-  //         email: payload.email,
-  //         password: payload.password,
-  //       });
-
-  //       storageService.setItem(STORAGE_KEYS.TOKEN, accessToken);
-  //       storageService.setItem(STORAGE_KEYS.USER, user);
-
-  //       set({ user, token: accessToken });
-  //     } catch (err) {
-  //       console.error('Erro no signUp:', err);
-  //       throw err;
-  //     } finally {
-  //       set({ isLoading: false });
-  //     }
-  //   },
+    try {
+      await userService.create(payload);
+      callBack();
+    } catch (err) {
+      console.error('Erro no signUp:', err);
+      throw err;
+    } finally {
+      set({isLoading: false});
+    }
+  },
 
   logout: () => {
     storageService.removeItem(STORAGE_KEYS.TOKEN);
