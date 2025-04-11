@@ -1,6 +1,6 @@
 import React from 'react';
 import {Screen} from '../../../components/Screen/Screen';
-import {Text} from '../../../components/Text/Text';
+
 import {useAuthStore} from '../../../stores/auth/authStore';
 import {ConfigSection} from '../../../components/ConfigSection/ConfigSection';
 
@@ -8,11 +8,7 @@ export function SettingsScreen() {
   const logout = useAuthStore(s => s.logout);
 
   return (
-    <Screen scrollabe>
-      <Text mb="s10" preset="headingLarge" color="primary">
-        Configurações
-      </Text>
-
+    <Screen title="Configurações" scrollabe>
       <ConfigSection
         title="Tema"
         actions={[
