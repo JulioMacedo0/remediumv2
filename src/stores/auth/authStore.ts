@@ -64,7 +64,7 @@ export const useAuthStore = create<AuthState>(set => ({
     const token = storageService.getItem('TOKEN');
     const user = storageService.getItem('USER');
     //simulate delay to ferify token
-    await new Promise(resolve => setTimeout(resolve, 3000));
+    await new Promise(resolve => setTimeout(resolve, 200));
     if (token && user) {
       set({token, user});
     }
