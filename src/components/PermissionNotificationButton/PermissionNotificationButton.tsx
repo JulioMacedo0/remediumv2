@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import {Linking, AppState, AppStateStatus} from 'react-native';
 import {OneSignal, OSNotificationPermission} from 'react-native-onesignal';
 import {TouchableOpacityBox} from '../Box/Box';
@@ -12,17 +12,27 @@ export function PermissionNotificationButton() {
     null,
   );
   const [loading, setLoading] = useState<boolean>(true);
-  const fetchPermission = async () => {
+
+  const fetchPermission = useCallback(async () => {
     try {
       setLoading(true);
       const status = await OneSignal.Notifications.permissionNative();
       setPermission(status);
     } catch (error) {
-      console.warn('Erro ao obter permissão do OneSignal:', error);
+      console.warn('Error getting permission state:', error);
     } finally {
       setLoading(false);
     }
-  };
+  }, []);
+
+  const handleAppStateChange = useCallback(
+    (nextAppState: AppStateStatus) => {
+      if (nextAppState === 'active') {
+        fetchPermission();
+      }
+    },
+    [fetchPermission],
+  );
 
   useEffect(() => {
     fetchPermission();
@@ -32,14 +42,7 @@ export function PermissionNotificationButton() {
       handleAppStateChange,
     );
     return () => subscription.remove();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  const handleAppStateChange = (nextAppState: AppStateStatus) => {
-    if (nextAppState === 'active') {
-      fetchPermission();
-    }
-  };
+  }, [handleAppStateChange, fetchPermission]);
 
   const handlePress = async () => {
     if (permission === 2) {
