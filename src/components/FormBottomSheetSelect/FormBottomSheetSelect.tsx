@@ -1,5 +1,9 @@
-import React, {useMemo, useRef} from 'react';
-import {BottomSheetModal, BottomSheetFlatList} from '@gorhom/bottom-sheet';
+import React, {useMemo, useRef, useCallback} from 'react';
+import {
+  BottomSheetModal,
+  BottomSheetFlatList,
+  BottomSheetBackdrop,
+} from '@gorhom/bottom-sheet';
 import {Controller, UseControllerProps, FieldValues} from 'react-hook-form';
 import {TouchableOpacityBox} from '../Box/Box';
 import {Text} from '../Text/Text';
@@ -35,10 +39,23 @@ export function FormBottomSheetSelect<
 }: FormBottomSheetSelectProps<FormType, T>) {
   const bottomSheetRef = useRef<BottomSheetModal>(null);
   const snapPoints = useMemo(() => ['30%'], []);
+  const {colors} = useAppTheme();
 
   const openSheet = () => bottomSheetRef.current?.present();
   const closeSheet = () => bottomSheetRef.current?.dismiss();
-  const {colors} = useAppTheme();
+
+  const renderBackdrop = useCallback(
+    (props: any) => (
+      <BottomSheetBackdrop
+        {...props}
+        pressBehavior="close"
+        disappearsOnIndex={-1}
+        appearsOnIndex={0}
+      />
+    ),
+    [],
+  );
+
   return (
     <Controller
       control={control}
@@ -59,7 +76,7 @@ export function FormBottomSheetSelect<
             px="s16"
             py="s12"
             activeOpacity={0.7}>
-            <Text color={'grayWhite'} preset="paragraphMedium">
+            <Text color="grayWhite" preset="paragraphMedium">
               {options.find(opt => opt.value === field.value)?.label ||
                 placeholder}
             </Text>
@@ -73,8 +90,13 @@ export function FormBottomSheetSelect<
           <BottomSheetModal
             ref={bottomSheetRef}
             snapPoints={snapPoints}
+            handleIndicatorStyle={{
+              backgroundColor: colors.grayWhite,
+            }}
+            backdropComponent={renderBackdrop}
             backgroundStyle={{
               backgroundColor: colors.primary,
+              opacity: 1,
             }}>
             <BottomSheetFlatList
               data={options}
