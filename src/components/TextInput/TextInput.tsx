@@ -61,7 +61,7 @@ export function TextInput({
             onBlur={() => setOnFocus(false)}
             placeholderTextColor={onFocus ? colors.primary : colors.gray2}
             secureTextEntry={isPassword && !isPasswordVisible}
-            style={[$textInputStyle, {flex: 1}]}
+            style={[$textInputStyle]}
             {...props}
           />
 
