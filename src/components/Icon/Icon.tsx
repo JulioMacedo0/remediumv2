@@ -15,6 +15,11 @@ import {
   Palette,
   EyeOff,
   Eye,
+  Bell,
+  BellDot,
+  BellOff,
+  BellRing,
+  BellMinus,
 } from 'lucide-react-native';
 
 import {Box, TouchableOpacityBox, TouchableOpacityBoxProps} from '../Box/Box';
@@ -34,7 +39,12 @@ export type IconNames =
   | 'Languages'
   | 'Palette'
   | 'EyeOff'
-  | 'Eye';
+  | 'Eye'
+  | 'Bell'
+  | 'BellDot'
+  | 'BellOff'
+  | 'BellRing'
+  | 'BellMinus';
 
 export type IconProps = {
   name: IconNames;
@@ -56,6 +66,11 @@ const iconMap: Record<IconNames, React.ComponentType<LucideProps>> = {
   Palette,
   EyeOff,
   Eye,
+  Bell,
+  BellDot,
+  BellOff,
+  BellRing,
+  BellMinus,
 };
 
 export function Icon({
