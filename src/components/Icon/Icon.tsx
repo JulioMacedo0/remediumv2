@@ -20,6 +20,9 @@ import {
   BellOff,
   BellRing,
   BellMinus,
+  Timer,
+  CalendarDays,
+  CalendarCheck,
 } from 'lucide-react-native';
 
 import {Box, TouchableOpacityBox, TouchableOpacityBoxProps} from '../Box/Box';
@@ -44,7 +47,10 @@ export type IconNames =
   | 'BellDot'
   | 'BellOff'
   | 'BellRing'
-  | 'BellMinus';
+  | 'BellMinus'
+  | 'Timer'
+  | 'CalendarDays'
+  | 'CalendarCheck';
 
 export type IconProps = {
   name: IconNames;
@@ -71,6 +77,9 @@ const iconMap: Record<IconNames, React.ComponentType<LucideProps>> = {
   BellOff,
   BellRing,
   BellMinus,
+  Timer,
+  CalendarDays,
+  CalendarCheck,
 };
 
 export function Icon({
