@@ -5,6 +5,9 @@ import {AppStack} from './AppStack';
 import {AuthStack} from './AuthStack';
 import {useAuthStore} from '../stores/auth/authStore';
 import {SplashScreen} from '../components/SplashScreen/SplashScreen';
+import {GestureHandlerRootView} from 'react-native-gesture-handler';
+import {StyleSheet} from 'react-native';
+import {BottomSheetModalProvider} from '@gorhom/bottom-sheet';
 
 export function Router() {
   const token = useAuthStore(s => s.token);
@@ -22,8 +25,17 @@ export function Router() {
   }, []);
 
   return (
-    <NavigationContainer>
-      {restoring ? <SplashScreen /> : token ? <AppStack /> : <AuthStack />}
-    </NavigationContainer>
+    <GestureHandlerRootView style={$style.container}>
+      <BottomSheetModalProvider>
+        <NavigationContainer>
+          {restoring ? <SplashScreen /> : token ? <AppStack /> : <AuthStack />}
+        </NavigationContainer>
+      </BottomSheetModalProvider>
+    </GestureHandlerRootView>
   );
 }
+const $style = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
+});
