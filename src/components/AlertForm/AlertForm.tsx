@@ -5,6 +5,9 @@ import {alertService} from '../../services/alert/alertService';
 import {CreateAlertDto} from '../../services/alert/alertTypes';
 import {Box} from '../Box/Box';
 import {FormTextInput} from '../FormTextInput/FormTextInput';
+import {FormBottomSheetSelect} from '../FormBottomSheetSelect/FormBottomSheetSelect';
+import {Text} from '../Text/Text';
+import {Button} from '../Button/Button';
 
 export function AlertForm() {
   const {
@@ -67,6 +70,56 @@ export function AlertForm() {
         boxProps={{
           mb: 's12',
         }}
+      />
+      <FormBottomSheetSelect
+        control={control}
+        name="alertType"
+        label="Tipo de alerta"
+        options={[
+          {label: 'Intervalo', value: 'INTERVAL', iconProps: {name: 'Timer'}},
+          {label: 'Diário', value: 'DAILY', iconProps: {name: 'Sun'}},
+          {
+            label: 'Semanal',
+            value: 'WEEKLY',
+            iconProps: {name: 'CalendarDays'},
+          },
+          {
+            label: 'Data específica',
+            value: 'DATE',
+            iconProps: {name: 'CalendarCheck'},
+          },
+        ]}
+      />
+
+      {alertType === 'INTERVAL' && (
+        // <TimeInput control={control} />
+        <Text>Time input</Text>
+      )}
+
+      {alertType === 'DAILY' && (
+        //  <TimeInput control={control} />
+        <Text>Time input</Text>
+      )}
+
+      {alertType === 'WEEKLY' && (
+        <>
+          {/* <DaySelector control={control} name="week" /> */}
+          <Text>week input</Text>
+          {/* <TimeInput control={control} /> */}
+          <Text>Time input</Text>
+        </>
+      )}
+
+      {alertType === 'DATE' && (
+        // <DatePicker control={control} name="date" />
+        <Text>DatePicker pinput</Text>
+      )}
+
+      <Button
+        title="Criar alerta"
+        buttonVariant="fill"
+        onPress={handleSubmit(onSubmit)}
+        loading={isSubmitting}
       />
     </Box>
   );
