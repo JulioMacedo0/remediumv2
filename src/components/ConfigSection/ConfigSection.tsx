@@ -1,13 +1,30 @@
 import React from 'react';
-import {Box, TouchableOpacityBox} from '../Box/Box';
+import {Box} from '../Box/Box';
 import {Text} from '../Text/Text';
-import {Icon, IconProps} from '../Icon/Icon';
+import {IconProps} from '../Icon/Icon';
+import {ConfigButton} from '../ConfigButton/ConfigButton';
 
-type ConfigAction = {
+type BaseConfigAction = {
+  key?: string;
+};
+
+type DefaultConfigAction = BaseConfigAction & {
+  variant?: 'default';
   label: string;
   iconProps: IconProps;
   onPress: () => void;
+  render?: undefined;
 };
+
+type CustomRenderConfigAction = BaseConfigAction & {
+  variant: 'custom';
+  render: () => React.ReactNode;
+  label?: undefined;
+  iconProps?: undefined;
+  onPress?: undefined;
+};
+
+type ConfigAction = DefaultConfigAction | CustomRenderConfigAction;
 
 type ConfigSectionProps = {
   title: string;
@@ -22,24 +39,24 @@ export function ConfigSection({title, actions}: ConfigSectionProps) {
       </Text>
 
       <Box flexDirection="row" flexWrap="wrap" gap="s12">
-        {actions.map(({label, iconProps, onPress}) => (
-          <TouchableOpacityBox
-            width={'100%'}
-            activeOpacity={0.7}
-            backgroundColor="primary"
-            key={label}
-            onPress={onPress}
-            flexDirection="row"
-            alignItems="center"
-            borderRadius="s12"
-            px="s12"
-            py="s8">
-            <Icon {...iconProps} size={18} />
-            <Text color="grayWhite" ml="s8">
-              {label}
-            </Text>
-          </TouchableOpacityBox>
-        ))}
+        {actions.map((action, index) => {
+          if (action.variant === 'custom') {
+            return (
+              <React.Fragment key={action.key ?? index}>
+                {action.render()}
+              </React.Fragment>
+            );
+          }
+
+          const {label, iconProps, onPress} = action;
+          return (
+            <ConfigButton
+              iconProps={iconProps}
+              label={label}
+              onPress={onPress}
+            />
+          );
+        })}
       </Box>
     </Box>
   );
