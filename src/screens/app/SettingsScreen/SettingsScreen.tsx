@@ -3,7 +3,7 @@ import {Screen} from '../../../components/Screen/Screen';
 
 import {useAuthStore} from '../../../stores/auth/authStore';
 import {ConfigSection} from '../../../components/ConfigSection/ConfigSection';
-import {PermissionNotificationItem} from '../../../components/PermissionNotificationItem/PermissionNotificationItem';
+import {PermissionNotificationButton} from '../../../components/PermissionNotificationButton/PermissionNotificationButton';
 
 export function SettingsScreen() {
   const logout = useAuthStore(s => s.logout);
@@ -70,7 +70,7 @@ export function SettingsScreen() {
         actions={[
           {
             variant: 'custom',
-            render: () => <PermissionNotificationItem />,
+            render: () => <PermissionNotificationButton />,
           },
         ]}
       />

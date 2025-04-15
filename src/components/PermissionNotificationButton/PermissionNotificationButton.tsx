@@ -7,7 +7,7 @@ import {Icon, IconNames} from '../Icon/Icon';
 import {ThemeColors} from '../../theme/theme';
 import {ActivityIndicator} from '../ActivityIndicator/ActivityIndicator';
 
-export function PermissionNotificationItem() {
+export function PermissionNotificationButton() {
   const [permission, setPermission] = useState<OSNotificationPermission | null>(
     null,
   );
