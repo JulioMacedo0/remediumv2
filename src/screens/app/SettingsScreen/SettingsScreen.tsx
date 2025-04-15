@@ -3,6 +3,7 @@ import {Screen} from '../../../components/Screen/Screen';
 
 import {useAuthStore} from '../../../stores/auth/authStore';
 import {ConfigSection} from '../../../components/ConfigSection/ConfigSection';
+import {PermissionNotificationItem} from '../../../components/PermissionNotificationItem/PermissionNotificationItem';
 
 export function SettingsScreen() {
   const logout = useAuthStore(s => s.logout);
@@ -61,6 +62,15 @@ export function SettingsScreen() {
               color: 'redError',
             },
             onPress: logout,
+          },
+        ]}
+      />
+      <ConfigSection
+        title="Notificações"
+        actions={[
+          {
+            variant: 'custom',
+            render: () => <PermissionNotificationItem />,
           },
         ]}
       />
