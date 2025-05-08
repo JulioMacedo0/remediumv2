@@ -5,6 +5,7 @@ import {STORAGE_KEYS} from '../../services/storage/storegesKeys';
 import {storageService} from '../../services/storage/storageService';
 import {userService} from '../../services/user/userService';
 import {CreateUserPayload} from '../../services/user/userType';
+import {OneSignal} from 'react-native-onesignal';
 
 type AuthState = {
   user: UserType | null;
@@ -30,7 +31,7 @@ export const useAuthStore = create<AuthState>(set => ({
 
       storageService.setItem(STORAGE_KEYS.TOKEN, accessToken);
       storageService.setItem(STORAGE_KEYS.USER, user);
-
+      OneSignal.login(user.id);
       set({user, token: accessToken});
     } catch (err) {
       console.error('Erro no signIn:', err);
@@ -44,7 +45,8 @@ export const useAuthStore = create<AuthState>(set => ({
     set({isLoading: true});
 
     try {
-      await userService.create(payload);
+      const user = await userService.create(payload);
+      OneSignal.login(user.id);
       callBack();
     } catch (err) {
       console.error('Erro no signUp:', err);
@@ -65,7 +67,9 @@ export const useAuthStore = create<AuthState>(set => ({
     const user = storageService.getItem('USER');
     //simulate delay to ferify token
     await new Promise(resolve => setTimeout(resolve, 200));
+
     if (token && user) {
+      OneSignal.login(user.id);
       set({token, user});
     }
   },
