@@ -5,16 +5,16 @@ import {TouchableOpacityBox} from '../Box/Box';
 import {Text} from '../Text/Text';
 import {format} from 'date-fns';
 
-type FormTimePickerProps<FormType extends FieldValues> = {
+type IntervalFormProps<FormType extends FieldValues> = {
   label?: string;
 } & UseControllerProps<FormType>;
 
-export function FormTimePicker<FormType extends FieldValues>({
+export function IntervalForm<FormType extends FieldValues>({
   control,
   name,
   rules,
   label,
-}: FormTimePickerProps<FormType>) {
+}: IntervalFormProps<FormType>) {
   const [open, setOpen] = useState(false);
 
   return (
