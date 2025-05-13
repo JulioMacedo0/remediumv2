@@ -1,30 +1,50 @@
 import React, {useState} from 'react';
-import {Controller, UseControllerProps, FieldValues} from 'react-hook-form';
+import {Controller, Control} from 'react-hook-form';
 import DatePicker from 'react-native-date-picker';
 import {TouchableOpacityBox} from '../Box/Box';
 import {Text} from '../Text/Text';
 import {format} from 'date-fns';
+import {CreateAlertForm} from '../AlertForm/AlertFormSchema';
 
-type IntervalFormProps<FormType extends FieldValues> = {
+const intervalToDate = (interval: Interval): Date => {
+  const now = new Date();
+  now.setHours(interval.hours || 0);
+  now.setMinutes(interval.minutes || 0);
+  now.setSeconds(interval.seconds || 0);
+  return now;
+};
+
+const dateToInterval = (date: Date): Interval => {
+  return {
+    hours: date.getHours(),
+    minutes: date.getMinutes(),
+    seconds: date.getSeconds(),
+  };
+};
+
+type Interval = {
+  hours: number;
+  minutes: number;
+  seconds: number;
+};
+
+type IntervalFormProps = {
+  control: Control<CreateAlertForm>;
+  name: 'interval';
   label?: string;
-} & UseControllerProps<FormType>;
+};
 
-export function IntervalForm<FormType extends FieldValues>({
-  control,
-  name,
-  rules,
-  label,
-}: IntervalFormProps<FormType>) {
+export function IntervalForm({control, name, label}: IntervalFormProps) {
   const [open, setOpen] = useState(false);
 
   return (
     <Controller
       control={control}
       name={name}
-      rules={rules}
       render={({field, fieldState}) => {
-        const selectedDate = field.value ? new Date(field.value) : new Date();
-
+        const selectedDate = field.value
+          ? intervalToDate(field.value)
+          : new Date();
         return (
           <>
             {label && (
@@ -42,7 +62,7 @@ export function IntervalForm<FormType extends FieldValues>({
               onPress={() => setOpen(true)}>
               <Text color="grayWhite">
                 {field.value
-                  ? format(new Date(field.value), 'HH:mm')
+                  ? format(intervalToDate(field.value), 'HH:mm')
                   : 'Selecionar horário'}
               </Text>
               {!!fieldState.error?.message && (
@@ -59,13 +79,11 @@ export function IntervalForm<FormType extends FieldValues>({
               date={selectedDate}
               onConfirm={date => {
                 setOpen(false);
-                field.onChange(date.toISOString());
-                console.log(date.toISOString());
-                // ou apenas `date` se preferir
+                field.onChange(dateToInterval(date));
               }}
               onCancel={() => setOpen(false)}
               locale="pt-BR"
-              theme="dark" // ou 'light' dependendo do seu tema
+              theme="dark"
             />
           </>
         );
