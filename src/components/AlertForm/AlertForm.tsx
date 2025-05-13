@@ -8,6 +8,7 @@ import {FormTextInput} from '../FormTextInput/FormTextInput';
 import {FormBottomSheetSelect} from '../FormBottomSheetSelect/FormBottomSheetSelect';
 import {Text} from '../Text/Text';
 import {Button} from '../Button/Button';
+import {IntervalForm} from '../IntervalForm/IntervalForm';
 
 export function AlertForm() {
   const {
@@ -22,6 +23,11 @@ export function AlertForm() {
       subtitle: '',
       body: '',
       alertType: 'INTERVAL',
+      interval: {
+        hours: 0,
+        minutes: 0,
+        seconds: 0,
+      },
     },
   });
 
@@ -32,9 +38,9 @@ export function AlertForm() {
       ...data,
       trigger: {
         alertType: data.alertType,
-        hours: data.hours,
-        minutes: data.minutes,
-        seconds: data.seconds,
+        hours: data.interval.hours,
+        minutes: data.interval.minutes,
+        seconds: data.interval.seconds,
         date: data.date,
         week: data.week ?? [],
       },
@@ -48,7 +54,7 @@ export function AlertForm() {
         control={control}
         label="Nome do remédio"
         name="title"
-        placeholder="Ripirona"
+        placeholder="Dipirona"
         boxProps={{
           mb: 's12',
         }}
@@ -92,8 +98,11 @@ export function AlertForm() {
       />
 
       {alertType === 'INTERVAL' && (
-        // <TimeInput control={control} />
-        <Text>Time input</Text>
+        <IntervalForm
+          control={control}
+          label="Horário do alerta"
+          name="interval"
+        />
       )}
 
       {alertType === 'DAILY' && (
