@@ -90,6 +90,7 @@ export function TextInput({
 }
 
 const $textInputStyle: TextStyle = {
+  flex: 1,
   fontFamily: $fontFamily.regular,
   ...$fontSizes.paragraphMedium,
 };
