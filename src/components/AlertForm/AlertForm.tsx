@@ -1,14 +1,14 @@
 import {zodResolver} from '@hookform/resolvers/zod';
 import {CreateAlertForm, createAlertSchema} from './AlertFormSchema';
 import {useForm} from 'react-hook-form';
-import {alertService} from '../../services/alert/alertService';
-import {CreateAlertDto} from '../../services/alert/alertTypes';
 import {Box} from '../Box/Box';
 import {FormTextInput} from '../FormTextInput/FormTextInput';
 import {FormBottomSheetSelect} from '../FormBottomSheetSelect/FormBottomSheetSelect';
 import {Text} from '../Text/Text';
 import {Button} from '../Button/Button';
 import {IntervalForm} from '../IntervalForm/IntervalForm';
+import {CreateAlertDto} from '../../services/alert/alertTypes';
+import {alertService} from '../../services/alert/alertService';
 
 export function AlertForm() {
   const {
@@ -16,7 +16,7 @@ export function AlertForm() {
     handleSubmit,
     watch,
     formState: {isSubmitting},
-  } = useForm<CreateAlertForm>({
+  } = useForm({
     resolver: zodResolver(createAlertSchema),
     defaultValues: {
       title: '',
@@ -28,12 +28,15 @@ export function AlertForm() {
         minutes: 0,
         seconds: 0,
       },
+      date: undefined,
+      week: [],
     },
   });
 
   const alertType = watch('alertType');
 
   const onSubmit = async (data: CreateAlertForm) => {
+    console.log('data', data);
     const payload: CreateAlertDto = {
       ...data,
       trigger: {
@@ -48,6 +51,7 @@ export function AlertForm() {
 
     await alertService.create(payload);
   };
+
   return (
     <Box>
       <FormTextInput
@@ -103,8 +107,10 @@ export function AlertForm() {
       {alertType === 'INTERVAL' && (
         <IntervalForm
           control={control}
-          label="Horário do alerta"
-          name="interval"
+          label="Intervalo de alerta"
+          boxProps={{
+            mb: 's12',
+          }}
         />
       )}
 
