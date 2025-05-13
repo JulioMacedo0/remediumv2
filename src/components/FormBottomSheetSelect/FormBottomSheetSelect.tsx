@@ -10,6 +10,7 @@ import {Text} from '../Text/Text';
 
 import {useAppTheme} from '../../hooks/UseAppTheme/UseAppTheme';
 import {Icon, IconProps} from '../Icon/Icon';
+import {ViewStyle} from 'react-native';
 
 type Option<T> = {
   label: string;
@@ -45,6 +46,11 @@ export function FormBottomSheetSelect<
 
   const openSheet = () => bottomSheetRef.current?.present();
   const closeSheet = () => bottomSheetRef.current?.dismiss();
+
+  const $bottomSheetContainer: ViewStyle = {
+    backgroundColor: colors.primary,
+    opacity: 1,
+  };
 
   const renderBackdrop = useCallback(
     (props: any) => (
@@ -97,10 +103,7 @@ export function FormBottomSheetSelect<
                 backgroundColor: colors.grayWhite,
               }}
               backdropComponent={renderBackdrop}
-              backgroundStyle={{
-                backgroundColor: colors.primary,
-                opacity: 1,
-              }}>
+              backgroundStyle={[$bottomSheetContainer]}>
               <BottomSheetFlatList
                 data={options}
                 keyExtractor={item => item.value}
