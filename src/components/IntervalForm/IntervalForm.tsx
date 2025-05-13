@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import {Controller, Control} from 'react-hook-form';
 import DatePicker from 'react-native-date-picker';
-import {TouchableOpacityBox} from '../Box/Box';
+import {Box, BoxProps, TouchableOpacityBox} from '../Box/Box';
 import {Text} from '../Text/Text';
 import {format} from 'date-fns';
 import {CreateAlertForm} from '../AlertForm/AlertFormSchema';
@@ -30,64 +30,66 @@ type Interval = {
 
 type IntervalFormProps = {
   control: Control<CreateAlertForm>;
-  name: 'interval';
   label?: string;
+  boxProps?: BoxProps;
 };
 
-export function IntervalForm({control, name, label}: IntervalFormProps) {
+export function IntervalForm({control, label, boxProps}: IntervalFormProps) {
   const [open, setOpen] = useState(false);
 
   return (
-    <Controller
-      control={control}
-      name={name}
-      render={({field, fieldState}) => {
-        const selectedDate = field.value
-          ? intervalToDate(field.value)
-          : new Date();
-        return (
-          <>
-            {label && (
-              <Text preset="paragraphMedium" mb="s4" color="primary">
-                {label}
-              </Text>
-            )}
-
-            <TouchableOpacityBox
-              backgroundColor="primary"
-              borderRadius="s12"
-              px="s16"
-              py="s12"
-              activeOpacity={0.7}
-              onPress={() => setOpen(true)}>
-              <Text color="grayWhite">
-                {field.value
-                  ? format(intervalToDate(field.value), 'HH:mm')
-                  : 'Selecionar horário'}
-              </Text>
-              {!!fieldState.error?.message && (
-                <Text color="error" mt="s4" preset="paragraphSmall">
-                  {fieldState.error.message}
+    <Box {...boxProps}>
+      <Controller
+        control={control}
+        name={'interval'}
+        render={({field, fieldState}) => {
+          const selectedDate = field.value
+            ? intervalToDate(field.value)
+            : new Date();
+          return (
+            <>
+              {label && (
+                <Text preset="paragraphMedium" mb="s4" color="primary">
+                  {label}
                 </Text>
               )}
-            </TouchableOpacityBox>
 
-            <DatePicker
-              modal
-              mode="time"
-              open={open}
-              date={selectedDate}
-              onConfirm={date => {
-                setOpen(false);
-                field.onChange(dateToInterval(date));
-              }}
-              onCancel={() => setOpen(false)}
-              locale="pt-BR"
-              theme="dark"
-            />
-          </>
-        );
-      }}
-    />
+              <TouchableOpacityBox
+                backgroundColor="primary"
+                borderRadius="s12"
+                px="s16"
+                py="s12"
+                activeOpacity={0.7}
+                onPress={() => setOpen(true)}>
+                <Text color="grayWhite">
+                  {field.value
+                    ? format(intervalToDate(field.value), 'HH:mm')
+                    : 'Selecionar horário'}
+                </Text>
+                {!!fieldState.error?.message && (
+                  <Text color="error" mt="s4" preset="paragraphSmall">
+                    {fieldState.error.message}
+                  </Text>
+                )}
+              </TouchableOpacityBox>
+
+              <DatePicker
+                modal
+                mode="time"
+                open={open}
+                date={selectedDate}
+                onConfirm={date => {
+                  setOpen(false);
+                  field.onChange(dateToInterval(date));
+                }}
+                onCancel={() => setOpen(false)}
+                locale="pt-BR"
+                theme="dark"
+              />
+            </>
+          );
+        }}
+      />
+    </Box>
   );
 }
