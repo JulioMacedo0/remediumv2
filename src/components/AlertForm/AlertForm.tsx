@@ -72,6 +72,9 @@ export function AlertForm() {
         }}
       />
       <FormBottomSheetSelect
+        boxProps={{
+          mb: 's12',
+        }}
         control={control}
         name="alertType"
         label="Tipo de alerta"
@@ -92,13 +95,34 @@ export function AlertForm() {
       />
 
       {alertType === 'INTERVAL' && (
-        // <TimeInput control={control} />
-        <Text>Time input</Text>
+        <Box flexDirection="row" alignContent="center">
+          <FormTextInput
+            control={control}
+            keyboardType="numeric"
+            name="hours"
+            label="Horas"
+            placeholder="1"
+            boxProps={{
+              mb: 's12',
+            }}
+          />
+
+          <FormTextInput
+            control={control}
+            keyboardType="numeric"
+            name="minutes"
+            label="Minutos"
+            placeholder="1"
+            boxProps={{
+              mb: 's12',
+            }}
+          />
+        </Box>
       )}
 
       {alertType === 'DAILY' && (
         //  <TimeInput control={control} />
-        <Text>Time input</Text>
+        <Text>Time DAILY</Text>
       )}
 
       {alertType === 'WEEKLY' && (
