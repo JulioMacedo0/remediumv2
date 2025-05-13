@@ -6,9 +6,9 @@ export const createAlertSchema = z.object({
   body: z.string().min(1),
   alertType: z.enum(['INTERVAL', 'DAILY', 'WEEKLY', 'DATE']),
   interval: z.object({
-    hours: z.number().optional().default(0),
-    minutes: z.number().optional().default(0),
-    seconds: z.number().optional().default(0),
+    hours: z.number().default(0),
+    minutes: z.number().default(0),
+    seconds: z.number().default(0),
   }),
   date: z.string().optional(),
   week: z
