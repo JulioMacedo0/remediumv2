@@ -9,46 +9,113 @@ import {IntervalForm} from '../IntervalForm/IntervalForm';
 import {DailyForm} from '../DailyForm/DailyForm';
 import {WeeklyForm} from '../WeeklyForm/WeeklyForm';
 import {DateForm} from '../DateForm/DateForm';
-import {CreateAlertDto} from '../../services/alert/alertTypes';
+import {
+  Alert,
+  CreateAlertDto,
+  UpdateAlertDto,
+} from '../../services/alert/alertTypes';
 import {alertService} from '../../services/alert/alertService';
 import {
   showToastSuccess,
   showToastError,
 } from '../../services/toast/toastService';
-import {useState} from 'react';
+import {useEffect, useState} from 'react';
+import {Text} from '../Text/Text';
 
-export function AlertForm() {
+type AlertFormProps = {
+  mode?: 'create' | 'edit';
+  initialAlert?: Alert;
+  alertId?: string;
+  onSuccess?: () => void;
+};
+
+export function AlertForm({
+  mode = 'create',
+  initialAlert,
+  alertId,
+  onSuccess,
+}: AlertFormProps) {
   const [loading, setLoading] = useState(false);
+  const [deleteLoading, setDeleteLoading] = useState(false);
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+  const isEditMode = mode === 'edit';
+
+  const defaultValues = {
+    title: '',
+    subtitle: '',
+    body: '',
+    alertType: 'INTERVAL' as const,
+    interval: {
+      hours: 0,
+      minutes: 0,
+      seconds: 0,
+    },
+    date: undefined,
+    week: [],
+  };
 
   const {
     control,
     handleSubmit,
     watch,
     reset,
+    setValue,
     formState: {isSubmitting},
   } = useForm({
     resolver: zodResolver(createAlertSchema),
-    defaultValues: {
-      title: '',
-      subtitle: '',
-      body: '',
-      alertType: 'INTERVAL',
-      interval: {
-        hours: 0,
-        minutes: 0,
-        seconds: 0,
-      },
-      date: undefined,
-      week: [],
-    },
+    defaultValues,
   });
 
+  useEffect(() => {
+    if (isEditMode && initialAlert && initialAlert.trigger) {
+      setValue('title', initialAlert.title);
+      setValue('subtitle', initialAlert.subtitle || '');
+      setValue('body', initialAlert.body || '');
+      setValue('alertType', initialAlert.trigger.alertType);
+
+      setValue('interval', {
+        hours: initialAlert.trigger.hours || 0,
+        minutes: initialAlert.trigger.minutes || 0,
+        seconds: initialAlert.trigger.seconds || 0,
+      });
+
+      if (initialAlert.trigger.date) {
+        setValue('date', initialAlert.trigger.date);
+      }
+
+      if (initialAlert.trigger.week && initialAlert.trigger.week.length > 0) {
+        setValue('week', initialAlert.trigger.week);
+      }
+    }
+  }, [isEditMode, initialAlert, setValue]);
+
   const alertType = watch('alertType');
+
+  const handleDelete = async () => {
+    if (!alertId) {
+      return;
+    }
+
+    setDeleteLoading(true);
+    try {
+      await alertService.remove(alertId);
+      showToastSuccess('Alerta removido com sucesso!');
+      if (onSuccess) {
+        onSuccess();
+      }
+    } catch (error) {
+      console.error('Erro ao remover alerta:', error);
+      showToastError('Não foi possível remover o alerta. Tente novamente.');
+    } finally {
+      setDeleteLoading(false);
+      setShowDeleteConfirm(false);
+    }
+  };
 
   const onSubmit = async (data: CreateAlertForm) => {
     setLoading(true);
     try {
-      const payload: CreateAlertDto = {
+      const payload = {
         ...data,
         trigger: {
           alertType: data.alertType,
@@ -60,25 +127,28 @@ export function AlertForm() {
         },
       };
 
-      await alertService.create(payload);
-      showToastSuccess('Alerta criado com sucesso!');
+      if (isEditMode && alertId) {
+        await alertService.update(alertId, payload as UpdateAlertDto);
+        showToastSuccess('Alerta atualizado com sucesso!');
+      } else {
+        await alertService.create(payload as CreateAlertDto);
+        showToastSuccess('Alerta criado com sucesso!');
+        reset(defaultValues);
+      }
 
-      reset({
-        title: '',
-        subtitle: '',
-        body: '',
-        alertType: 'INTERVAL',
-        interval: {
-          hours: 0,
-          minutes: 0,
-          seconds: 0,
-        },
-        date: undefined,
-        week: [],
-      });
+      if (onSuccess) {
+        onSuccess();
+      }
     } catch (error) {
-      console.error('Erro ao criar alerta:', error);
-      showToastError('Não foi possível criar o alerta. Tente novamente.');
+      console.error(
+        `Erro ao ${isEditMode ? 'atualizar' : 'criar'} alerta:`,
+        error,
+      );
+      showToastError(
+        `Não foi possível ${
+          isEditMode ? 'atualizar' : 'criar'
+        } o alerta. Tente novamente.`,
+      );
     } finally {
       setLoading(false);
     }
@@ -176,12 +246,92 @@ export function AlertForm() {
         />
       )}
 
-      <Button
-        title="Criar alerta"
-        buttonVariant="fill"
-        onPress={handleSubmit(onSubmit)}
-        loading={loading || isSubmitting}
-      />
+      <Box flexDirection="row" justifyContent="space-between" mt="s16">
+        {isEditMode ? (
+          <>
+            <Box flex={1} mr="s8">
+              <Button
+                title="Excluir"
+                buttonVariant="outline"
+                onPress={() => setShowDeleteConfirm(true)}
+                loading={deleteLoading}
+                disabled={loading}
+              />
+            </Box>
+            <Box flex={1} ml="s8">
+              <Button
+                title="Salvar"
+                buttonVariant="fill"
+                onPress={handleSubmit(onSubmit)}
+                loading={loading}
+                disabled={deleteLoading}
+              />
+            </Box>
+          </>
+        ) : (
+          <Box width="100%">
+            <Button
+              title="Criar alerta"
+              buttonVariant="fill"
+              onPress={handleSubmit(onSubmit)}
+              loading={loading || isSubmitting}
+            />
+          </Box>
+        )}
+      </Box>
+
+      {showDeleteConfirm && (
+        <Box
+          position="absolute"
+          top={0}
+          left={0}
+          right={0}
+          bottom={0}
+          backgroundColor="background"
+          justifyContent="center"
+          alignItems="center"
+          padding="s16">
+          <Box
+            backgroundColor="background"
+            borderRadius="s16"
+            padding="s16"
+            width="100%">
+            <Text
+              preset="headingSmall"
+              color="primary"
+              textAlign="center"
+              mb="s16">
+              Excluir alerta
+            </Text>
+            <Text
+              preset="paragraphMedium"
+              color="primary"
+              textAlign="center"
+              mb="s24">
+              Tem certeza que deseja excluir este alerta? Esta ação não pode ser
+              desfeita.
+            </Text>
+            <Box flexDirection="row" justifyContent="space-between">
+              <Box flex={1} mr="s8">
+                <Button
+                  title="Cancelar"
+                  buttonVariant="outline"
+                  onPress={() => setShowDeleteConfirm(false)}
+                  disabled={deleteLoading}
+                />
+              </Box>
+              <Box flex={1} ml="s8">
+                <Button
+                  title="Excluir"
+                  buttonVariant="fill"
+                  onPress={handleDelete}
+                  loading={deleteLoading}
+                />
+              </Box>
+            </Box>
+          </Box>
+        </Box>
+      )}
     </Box>
   );
 }
