@@ -115,7 +115,7 @@ export function IntervalForm({control, label, boxProps}: IntervalFormProps) {
                 }}
                 onCancel={() => setOpen(false)}
                 locale="pt-BR"
-                theme="dark"
+                theme="light"
               />
             </>
           );
