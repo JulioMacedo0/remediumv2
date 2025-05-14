@@ -7,6 +7,8 @@ import {FormBottomSheetSelect} from '../FormBottomSheetSelect/FormBottomSheetSel
 import {Text} from '../Text/Text';
 import {Button} from '../Button/Button';
 import {IntervalForm} from '../IntervalForm/IntervalForm';
+import {DailyForm} from '../DailyForm/DailyForm';
+import {WeeklyForm} from '../WeeklyForm/WeeklyForm';
 import {CreateAlertDto} from '../../services/alert/alertTypes';
 import {alertService} from '../../services/alert/alertService';
 
@@ -36,13 +38,13 @@ export function AlertForm() {
   const alertType = watch('alertType');
 
   const onSubmit = async (data: CreateAlertForm) => {
-    console.log('data', data);
     const payload: CreateAlertDto = {
       ...data,
       trigger: {
         alertType: data.alertType,
         hours: data.interval.hours,
         minutes: data.interval.minutes,
+
         seconds: data.interval.seconds,
         date: data.date,
         week: data.week ?? [],
@@ -115,17 +117,17 @@ export function AlertForm() {
       )}
 
       {alertType === 'DAILY' && (
-        //  <TimeInput control={control} />
-        <Text>Time DAILY</Text>
+        <DailyForm
+          control={control}
+          label="Horário do alerta diário"
+          boxProps={{
+            mb: 's12',
+          }}
+        />
       )}
 
       {alertType === 'WEEKLY' && (
-        <>
-          {/* <DaySelector control={control} name="week" /> */}
-          <Text>week input</Text>
-          {/* <TimeInput control={control} /> */}
-          <Text>Time input</Text>
-        </>
+        <WeeklyForm control={control} boxProps={{mb: 's12'}} />
       )}
 
       {alertType === 'DATE' && (
