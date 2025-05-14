@@ -229,7 +229,6 @@ export function AlertForm({
       {alertType === 'WEEKLY' && (
         <WeeklyForm
           control={control}
-          label="Configuração do alerta semanal"
           boxProps={{
             mb: 's12',
           }}
