@@ -3,7 +3,7 @@ import {z} from 'zod';
 const baseAlertSchema = {
   title: z.string().min(1, 'Nome do remédio é obrigatório'),
   subtitle: z.string().min(1, 'Dosagem é obrigatória'),
-  body: z.string().min(1, 'Lembrete é obrigatório'),
+  body: z.string().min(1, 'Instruções é obrigatório'),
   alertType: z.enum(['INTERVAL', 'DAILY', 'WEEKLY', 'DATE']),
 };
 

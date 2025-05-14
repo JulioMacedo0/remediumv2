@@ -43,7 +43,7 @@ export function AlertForm({
   const defaultValues = {
     title: '',
     subtitle: '',
-    body: '',
+    body: ' ',
     alertType: 'INTERVAL' as const,
     interval: {
       hours: 0,
@@ -177,8 +177,8 @@ export function AlertForm({
       <FormTextInput
         control={control}
         name="body"
-        label="Lembrete"
-        placeholder="Tomar antes da café da manhã"
+        label="Instruções"
+        placeholder="Tomar em jejum"
         boxProps={{
           mb: 's12',
         }}
