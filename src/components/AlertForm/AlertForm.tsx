@@ -11,12 +11,20 @@ import {WeeklyForm} from '../WeeklyForm/WeeklyForm';
 import {DateForm} from '../DateForm/DateForm';
 import {CreateAlertDto} from '../../services/alert/alertTypes';
 import {alertService} from '../../services/alert/alertService';
+import {
+  showToastSuccess,
+  showToastError,
+} from '../../services/toast/toastService';
+import {useState} from 'react';
 
 export function AlertForm() {
+  const [loading, setLoading] = useState(false);
+
   const {
     control,
     handleSubmit,
     watch,
+    reset,
     formState: {isSubmitting},
   } = useForm({
     resolver: zodResolver(createAlertSchema),
@@ -38,19 +46,42 @@ export function AlertForm() {
   const alertType = watch('alertType');
 
   const onSubmit = async (data: CreateAlertForm) => {
-    const payload: CreateAlertDto = {
-      ...data,
-      trigger: {
-        alertType: data.alertType,
-        hours: data.interval.hours,
-        minutes: data.interval.minutes,
-        seconds: data.interval.seconds,
-        date: data.date,
-        week: data.week ?? [],
-      },
-    };
+    setLoading(true);
+    try {
+      const payload: CreateAlertDto = {
+        ...data,
+        trigger: {
+          alertType: data.alertType,
+          hours: data.interval.hours,
+          minutes: data.interval.minutes,
+          seconds: data.interval.seconds,
+          date: data.date,
+          week: data.week ?? [],
+        },
+      };
 
-    await alertService.create(payload);
+      await alertService.create(payload);
+      showToastSuccess('Alerta criado com sucesso!');
+
+      reset({
+        title: '',
+        subtitle: '',
+        body: '',
+        alertType: 'INTERVAL',
+        interval: {
+          hours: 0,
+          minutes: 0,
+          seconds: 0,
+        },
+        date: undefined,
+        week: [],
+      });
+    } catch (error) {
+      console.error('Erro ao criar alerta:', error);
+      showToastError('Não foi possível criar o alerta. Tente novamente.');
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -149,7 +180,7 @@ export function AlertForm() {
         title="Criar alerta"
         buttonVariant="fill"
         onPress={handleSubmit(onSubmit)}
-        loading={isSubmitting}
+        loading={loading || isSubmitting}
       />
     </Box>
   );
