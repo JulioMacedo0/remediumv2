@@ -8,18 +8,30 @@ import {ptBR} from 'date-fns/locale';
 
 type DailyFormProps = {
   control: Control<any>;
+  name?: string;
   label?: string;
   boxProps?: BoxProps;
 };
 
-export function DailyForm({control, label, boxProps}: DailyFormProps) {
+export function DailyForm({
+  control,
+  name = 'date',
+  label,
+  boxProps,
+}: DailyFormProps) {
   const [open, setOpen] = useState(false);
 
   return (
     <Box {...boxProps}>
+      {label && (
+        <Text preset="paragraphMedium" mb="s4" color="primary">
+          {label}
+        </Text>
+      )}
+
       <Controller
         control={control}
-        name={'date'}
+        name={name}
         render={({field, fieldState}) => {
           const selectedDate = field.value ? new Date(field.value) : new Date();
 
@@ -32,12 +44,6 @@ export function DailyForm({control, label, boxProps}: DailyFormProps) {
 
           return (
             <>
-              {label && (
-                <Text preset="paragraphMedium" mb="s4" color="primary">
-                  {label}
-                </Text>
-              )}
-
               <TouchableOpacityBox
                 backgroundColor="primary"
                 borderRadius="s12"
@@ -53,12 +59,13 @@ export function DailyForm({control, label, boxProps}: DailyFormProps) {
                     ? format(new Date(field.value), 'HH:mm', {locale: ptBR})
                     : 'Selecionar horário'}
                 </Text>
-                {!!fieldState.error?.message && (
-                  <Text color="error" mt="s4" preset="paragraphSmall">
-                    {fieldState.error.message}
-                  </Text>
-                )}
               </TouchableOpacityBox>
+
+              {!!fieldState.error?.message && (
+                <Text color="error" mt="s4" preset="paragraphSmall">
+                  {fieldState.error.message}
+                </Text>
+              )}
 
               <DatePicker
                 modal
@@ -71,7 +78,7 @@ export function DailyForm({control, label, boxProps}: DailyFormProps) {
                 date={selectedDate}
                 onConfirm={date => {
                   setOpen(false);
-                  // Convertendo para string ISO para armazenar apenas o horário selecionado
+
                   field.onChange(date.toISOString());
                 }}
                 onCancel={() => setOpen(false)}

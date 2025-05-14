@@ -93,12 +93,13 @@ export function IntervalForm({control, label, boxProps}: IntervalFormProps) {
                       })()
                     : 'Selecionar horário'}
                 </Text>
-                {!!fieldState.error?.message && (
-                  <Text color="error" mt="s4" preset="paragraphSmall">
-                    {fieldState.error.message}
-                  </Text>
-                )}
               </TouchableOpacityBox>
+
+              {!!fieldState.error?.message && (
+                <Text color="error" mt="s4" preset="paragraphSmall">
+                  {fieldState.error.message}
+                </Text>
+              )}
 
               <DatePicker
                 modal

@@ -61,12 +61,13 @@ export function WeeklyForm({control, label, boxProps}: WeeklyFormProps) {
                       ? format(selectedDate, 'HH:mm', {locale: ptBR})
                       : 'Selecionar horário'}
                   </Text>
-                  {!!fieldState.error?.message && (
-                    <Text color="error" mt="s4" preset="paragraphSmall">
-                      {fieldState.error.message}
-                    </Text>
-                  )}
                 </TouchableOpacityBox>
+
+                {!!fieldState.error?.message && (
+                  <Text color="error" mt="s4" preset="paragraphSmall">
+                    {fieldState.error.message}
+                  </Text>
+                )}
 
                 <DatePicker
                   modal

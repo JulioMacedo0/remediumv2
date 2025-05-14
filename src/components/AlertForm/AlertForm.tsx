@@ -44,7 +44,6 @@ export function AlertForm() {
         alertType: data.alertType,
         hours: data.interval.hours,
         minutes: data.interval.minutes,
-
         seconds: data.interval.seconds,
         date: data.date,
         week: data.week ?? [],
