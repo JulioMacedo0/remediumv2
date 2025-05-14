@@ -21,14 +21,17 @@ const dayOfWeekNames: Record<DayOfWeek, string> = {
   SATURDAY: 'Sábado',
 };
 
-const formatTime = (hours?: number, minutes?: number): string => {
-  if (hours === undefined || minutes === undefined) {
+const formatTime = (date?: string): string => {
+  if (!date) {
     return '--:--';
   }
-  return `${String(hours).padStart(2, '0')}:${String(minutes).padStart(
-    2,
-    '0',
-  )}`;
+
+  try {
+    const dateObj = new Date(date);
+    return format(dateObj, 'HH:mm', {locale: ptBR});
+  } catch (error) {
+    return '--:--';
+  }
 };
 
 const getAlertTypeIcon = (alertType: AlertType) => {
@@ -87,13 +90,21 @@ const renderTriggerSummary = (alert: Alert) => {
     }
 
     case 'DAILY':
-      return `Todos os dias às ${formatTime(hours, minutes)}`;
+      if (!date) {
+        return 'Horário não definido';
+      }
+      return `Todos os dias às ${formatTime(date)}`;
 
     case 'WEEKLY': {
+      if (!date) {
+        return 'Horário não definido';
+      }
+
       const daysText =
         week?.map(day => dayOfWeekNames[day]).join(', ') ||
         'Nenhum dia selecionado';
-      return `${daysText} às ${formatTime(hours, minutes)}`;
+
+      return `${daysText} às ${formatTime(date)}`;
     }
 
     case 'DATE':
