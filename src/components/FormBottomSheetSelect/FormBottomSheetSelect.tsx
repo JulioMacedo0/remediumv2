@@ -85,7 +85,10 @@ export function FormBottomSheetSelect<
               px="s16"
               py="s12"
               activeOpacity={0.7}>
-              <Text color="grayWhite" preset="paragraphMedium">
+              <Text
+                color="grayWhite"
+                preset="paragraphMedium"
+                textAlign="center">
                 {options.find(opt => opt.value === field.value)?.label ||
                   placeholder}
               </Text>
