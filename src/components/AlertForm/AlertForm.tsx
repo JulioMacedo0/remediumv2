@@ -43,7 +43,7 @@ export function AlertForm({
   const defaultValues = {
     title: '',
     subtitle: '',
-    body: ' ',
+    body: '',
     alertType: 'INTERVAL' as const,
     interval: {
       hours: 0,
