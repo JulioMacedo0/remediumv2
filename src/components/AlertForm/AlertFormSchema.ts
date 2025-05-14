@@ -1,13 +1,13 @@
 import {z} from 'zod';
+import {DAYS_OF_WEEK, ALERT_TYPES} from '../../services/alert/alertTypes';
 
 const baseAlertSchema = {
   title: z.string().min(1, 'Nome do remédio é obrigatório'),
   subtitle: z.string().min(1, 'Dosagem é obrigatória'),
   body: z.string().min(1, 'Instruções é obrigatório'),
-  alertType: z.enum(['INTERVAL', 'DAILY', 'WEEKLY', 'DATE']),
+  alertType: z.enum(ALERT_TYPES),
 };
 
-// Schema completo com validação condicional
 export const createAlertSchema = z
   .object({
     ...baseAlertSchema,
@@ -17,19 +17,7 @@ export const createAlertSchema = z
       seconds: z.number().default(0),
     }),
     date: z.string().optional(),
-    week: z
-      .array(
-        z.enum([
-          'SUNDAY',
-          'MONDAY',
-          'TUESDAY',
-          'WEDNESDAY',
-          'THURSDAY',
-          'FRIDAY',
-          'SATURDAY',
-        ]),
-      )
-      .optional(),
+    week: z.array(z.enum(DAYS_OF_WEEK)).optional(),
   })
   .refine(
     data => {
