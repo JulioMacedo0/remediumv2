@@ -13,15 +13,11 @@ type DefaultConfigAction = BaseConfigAction & {
   label: string;
   iconProps: IconProps;
   onPress: () => void;
-  render?: undefined;
 };
 
 type CustomRenderConfigAction = BaseConfigAction & {
   variant: 'custom';
   render: () => React.ReactNode;
-  label?: undefined;
-  iconProps?: undefined;
-  onPress?: undefined;
 };
 
 type ConfigAction = DefaultConfigAction | CustomRenderConfigAction;
@@ -51,6 +47,7 @@ export function ConfigSection({title, actions}: ConfigSectionProps) {
           const {label, iconProps, onPress} = action;
           return (
             <ConfigButton
+              key={action.key ?? index}
               iconProps={iconProps}
               label={label}
               onPress={onPress}
