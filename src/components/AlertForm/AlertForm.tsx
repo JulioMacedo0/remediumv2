@@ -4,11 +4,11 @@ import {useForm} from 'react-hook-form';
 import {Box} from '../Box/Box';
 import {FormTextInput} from '../FormTextInput/FormTextInput';
 import {FormBottomSheetSelect} from '../FormBottomSheetSelect/FormBottomSheetSelect';
-import {Text} from '../Text/Text';
 import {Button} from '../Button/Button';
 import {IntervalForm} from '../IntervalForm/IntervalForm';
 import {DailyForm} from '../DailyForm/DailyForm';
 import {WeeklyForm} from '../WeeklyForm/WeeklyForm';
+import {DateForm} from '../DateForm/DateForm';
 import {CreateAlertDto} from '../../services/alert/alertTypes';
 import {alertService} from '../../services/alert/alertService';
 
@@ -127,12 +127,23 @@ export function AlertForm() {
       )}
 
       {alertType === 'WEEKLY' && (
-        <WeeklyForm control={control} boxProps={{mb: 's12'}} />
+        <WeeklyForm
+          control={control}
+          label="Configuração do alerta semanal"
+          boxProps={{
+            mb: 's12',
+          }}
+        />
       )}
 
       {alertType === 'DATE' && (
-        // <DatePicker control={control} name="date" />
-        <Text>DatePicker pinput</Text>
+        <DateForm
+          control={control}
+          label="Data e hora do alerta"
+          boxProps={{
+            mb: 's12',
+          }}
+        />
       )}
 
       <Button
