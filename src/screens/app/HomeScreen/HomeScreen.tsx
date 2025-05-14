@@ -1,13 +1,17 @@
 import React from 'react';
 import {AppTabScreenProps} from '../../../routes/navigationType';
-
-import {Text} from '../../../components/Text/Text';
 import {Screen} from '../../../components/Screen/Screen';
+import {AlertList} from '../../../components/AlertList/AlertList';
+import {Alert} from '../../../services/alert/alertTypes';
 
-export function HomeScreen({}: AppTabScreenProps<'HomeScreen'>) {
+export function HomeScreen({navigation}: AppTabScreenProps<'HomeScreen'>) {
+  const handleAlertPress = (alert: Alert) => {
+    console.log('Alerta selecionado:', alert.id);
+  };
+
   return (
     <Screen title="Remedium">
-      <Text>Home</Text>
+      <AlertList onAlertPress={handleAlertPress} />
     </Screen>
   );
 }
