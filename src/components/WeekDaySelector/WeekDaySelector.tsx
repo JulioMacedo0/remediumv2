@@ -4,15 +4,7 @@ import {Box, BoxProps, TouchableOpacityBox} from '../Box/Box';
 import {Text} from '../Text/Text';
 import {ScrollView} from 'react-native';
 import {CreateAlertForm} from '../AlertForm/AlertFormSchema';
-
-export type DayOfWeek =
-  | 'SUNDAY'
-  | 'MONDAY'
-  | 'TUESDAY'
-  | 'WEDNESDAY'
-  | 'THURSDAY'
-  | 'FRIDAY'
-  | 'SATURDAY';
+import {DayOfWeek} from '../../services/alert/alertTypes';
 
 type WeekDaySelectorProps = {
   control: Control<any>;
