@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useState, useCallback} from 'react';
 import {NavigationContainer} from '@react-navigation/native';
 
 import {AppStack} from './AppStack';
@@ -12,40 +12,50 @@ import {LogLevel, OneSignal} from 'react-native-onesignal';
 import {env} from '../env';
 
 export function Router() {
-  const token = useAuthStore(s => s.token);
+  const userIsAutenticated = useAuthStore(s => s.token);
   const restoreSession = useAuthStore(s => s.restoreSession);
   const [restoring, setRestoring] = useState(true);
+  const [sessionRestored, setSessionRestored] = useState(false);
+  const [splashAnimationComplete, setSplashAnimationComplete] = useState(false);
 
-  const restoreSessionFn = async () => {
+  const restoreSessionFn = useCallback(async () => {
     await restoreSession();
+    setSessionRestored(true);
+  }, [restoreSession]);
+
+  const handleSplashAnimationComplete = useCallback(() => {
+    setSplashAnimationComplete(true);
     setRestoring(false);
-  };
+  }, []);
 
   useEffect(() => {
-    // Enable verbose logging for debugging (remove in production)
     OneSignal.Debug.setLogLevel(LogLevel.Verbose);
-    // Initialize with your OneSignal App ID
     OneSignal.initialize(env.ONE_SIGNAL_APP_ID);
-    // Use this method to prompt for push notifications.
-    // We recommend removing this method after testing and instead use In-App Messages to prompt for notification permission.
     OneSignal.Notifications.requestPermission(false);
   }, []);
 
   useEffect(() => {
     restoreSessionFn();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [restoreSessionFn]);
 
+  const showSplashScreen = restoring || !splashAnimationComplete;
   return (
     <GestureHandlerRootView style={$style.container}>
       <BottomSheetModalProvider>
         <NavigationContainer>
-          {restoring ? <SplashScreen /> : token ? <AppStack /> : <AuthStack />}
+          {userIsAutenticated ? <AppStack /> : <AuthStack />}
         </NavigationContainer>
+        {showSplashScreen && (
+          <SplashScreen
+            isSessionRestored={sessionRestored}
+            onAnimationComplete={handleSplashAnimationComplete}
+          />
+        )}
       </BottomSheetModalProvider>
     </GestureHandlerRootView>
   );
 }
+
 const $style = StyleSheet.create({
   container: {
     flex: 1,
