@@ -1,10 +1,8 @@
 import React, {useEffect, useRef} from 'react';
-import {Animated, StyleSheet, Dimensions} from 'react-native';
+import {Animated, StyleSheet} from 'react-native';
 import {Text} from '../Text/Text';
 import {useTheme} from '@shopify/restyle';
 import {Theme} from '../../theme/theme';
-
-const {width, height} = Dimensions.get('window');
 
 type SplashScreenProps = {
   onAnimationComplete?: () => void;
@@ -23,7 +21,6 @@ export function SplashScreen({
   const finalScale = useRef(new Animated.Value(1)).current;
   const fadeOut = useRef(new Animated.Value(1)).current;
 
-  // Animação de "respiração" - o logo fica pulsando suavemente enquanto aguarda
   const startBreathingAnimation = () => {
     Animated.loop(
       Animated.sequence([
@@ -41,7 +38,6 @@ export function SplashScreen({
     ).start();
   };
 
-  // Animação inicial (fade in e scale)
   useEffect(() => {
     Animated.parallel([
       Animated.timing(fadeIn, {
@@ -60,13 +56,10 @@ export function SplashScreen({
     });
   }, [fadeIn, scale, startBreathingAnimation]);
 
-  // Animação final quando a sessão é restaurada
   useEffect(() => {
     if (isSessionRestored) {
-      // Para a animação de respiração
       breathe.stopAnimation();
 
-      // Realiza a animação final: escala aumenta e desaparece
       Animated.sequence([
         Animated.timing(breathe, {
           toValue: 1,
@@ -75,7 +68,7 @@ export function SplashScreen({
         }),
         Animated.parallel([
           Animated.timing(finalScale, {
-            toValue: 20, // Escala enorme para cobrir a tela
+            toValue: 20,
             duration: 700,
             useNativeDriver: true,
           }),
