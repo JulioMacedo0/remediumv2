@@ -112,9 +112,7 @@ export const useAuthStore = create<AuthState>(set => ({
       }
     } catch (error) {
       logger.error('Session restoration failed', undefined, error);
-      storageService.removeItem(STORAGE_KEYS.TOKEN);
-      storageService.removeItem(STORAGE_KEYS.REFRESH_TOKEN);
-      storageService.removeItem(STORAGE_KEYS.USER);
+      await useAuthStore.getState().logout();
     }
   },
 }));
